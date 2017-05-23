@@ -2,8 +2,15 @@
 # densities.R
 ###############################
 
-# Creador de funciones de densidad:
-dfunCreate <- (function(...) stats::approxfun(..., yleft = 0, yright = 0)) %cmp% (function(x) stats::density(x, bw = "SJ"))
+
+#' Creation of approximate kernel density estimation function.
+#'
+#' \code{dfunCreate} takes a series of data and returns a continuous function that approximates
+#' a kernel density estimation, for such data.
+#'
+#' This function adjusts \code{\link{stats::density}} results to a linearly interpolated function
+dfunCreate <- (function(...) stats::approxfun(..., yleft = 0, yright = 0)) %cmp%
+    (function(x, ...) stats::density(x, bw = "SJ", ...))
 # USO:
 #    dfun <- dfunCreate(X) # donde X es el vector de datos
 #      y luego se puede usar esta función
