@@ -2,7 +2,7 @@ Package: spitools
 Type: Package
 Title: Tools for Computing the Standarized Precipitation Index (SPI)
 Version: 0.1.0
-Author@R: c(
+Authors@R: c(
     person("Julio Sergio", "Santana", email="juliosergio@gmail.com", role=c("aut", "cre")),
     person("Martin Jose", "Montero Martinez", email="mjmonteromtz@gmail.com", role="aut"),
     person("Efrain", "Mateos Farfan", email="eframateos@gmail.com", role="aut"))
@@ -13,4 +13,7 @@ Encoding: UTF-8
 LazyData: true
 URL: http://github.com/juliosergio/spitools
 BugReports: http://github.com/juliosergio/spitools/issues
-Imports: stats
+Imports: stats,
+    data.table,
+    lazyeval
+RoxygenNote: 6.0.1

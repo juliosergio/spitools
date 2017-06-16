@@ -5,11 +5,14 @@
 # Function composition
 composite <- function(f,g) function(...) f(g(...))
 # as operator:
-`%cmp%` <- composite
+# `%cmp%` <- composite
+`%cmp%` <- function(f,g) function(...) f(g(...))
 
 `%,%` <- function(x, y) paste0(x, y) # string concatenate
 
 `%//%` <- function(x,y) as.integer(x/y) # Integer division
+
+ftst <- function(x) print(x)
 
 group.mean <- function(x, ini=1, size=12) {
     # Computes the mean of groups inside 'x', each of size 'size'
@@ -64,6 +67,55 @@ ffun <- function(f, ...) function(x) f(x, ...)
 # f0 <- ffun(`+`, 2)
 # f0(5) ===> 7
 
+# Sintaxis de ifelse multiple -------------------------------------------------------
+# library(lazyeval)
+i_ <- function(if_stat, then) {
+    if_stat <- lazyeval::expr_text(if_stat)
+    then    <- lazyeval::expr_text(then)
+    sprintf("ifelse(%s, %s, ", if_stat, then)
+}
+
+e_ <- function(else_ret) {
+    else_ret <- lazyeval::expr_text(else_ret)
+    else_ret
+}
+
+if.else_ <- function(...) {
+    args <- list(...)
+
+    for (i in 1:(length(args) - 1) ) {
+        if (substr(args[[i]], 1, 6) != "ifelse") {
+            stop("All but the last argument, need to be if.then_ functions.", call. = FALSE)
+        }
+    }
+    if (substr(args[[length(args)]], 1, 6) == "ifelse"){
+        stop("Last argument needs to be an else_ function.", call. = FALSE)
+    }
+    args$final <- paste(rep(')', length(args) - 1), collapse = '')
+    eval_string <- do.call('paste', args)
+    eval(parse(text = eval_string), envir = parent.frame())
+}
+
+test.ie <- function() {
+    dd <- data.frame(a=c(1,2,1,3), b=1:4)
+    if.else_(
+        i_(dd$a==1, dd$b),
+        i_(dd$a==2, dd$b*100),
+        e_(-dd$b)
+    ) # GIVES: c(1, 200, 3, -4)
+}
+
+# Lo mismo que lo anterior pero con la funcionalidad de data.table
+
+test.dt <- function() {
+    dd <- data.frame(a=c(1L,2L,1L,3L), b=1:4)
+    setDT(dd)[
+                , c := -b    ][ # Default
+        a == 1L , c := b     ][
+        a == 2L , c := 100*b ][,c] # <- GIVES only vector or, all dd -> []
+}
+
+# END Sintaxis de ifelse multiple -------------------------------------------------------
 
 
 
