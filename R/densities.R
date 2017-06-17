@@ -72,9 +72,10 @@ papproxfun <- function (...) stats::approxfun(..., yleft = 0, yright = 1)
 #'    approximation function.
 #'
 #' @param x.data A numeric vector containing the data.
-#' @param aprxf The creator of the interpolation function.
+#' @param aprxf A function used to create an interpolation function.
 #' @param accumulate If \code{TRUE}, it indicates that the resulting function is a distribution function, i.e.,
-#'    an accumulated density function.
+#'    an accumulated density function; otherwise, the result will be a density of probabilities
+#'    function.
 #' @param ... All the other, optional, parameters required by \code{\link[stats]{density}} function to
 #'    generate a kernel density estimation from the data.
 #'
@@ -118,6 +119,24 @@ ffunCreate <- function(x.data, aprxf=dapproxfun, accumulate = FALSE, ...) {
 #' \code{dSfunCreate} takes a set of data and generates a density of probabilities function usting
 #'    splines to interpolate between the resulting sample points.
 #'
-#'
+#' @inheritParams ffunCreate
+#' @return returns a function performing spline interpolation on a set of points generated from a kernel
+#'    density of probabilities from the given \code{x.data}.
+#' @export
 dSfunCreate <- function(x.data, ...) ffunCreate(x.data, dsplinefun, ...)
+
+## pSfunCreate() ========================================================================================
+#' Create distribution of probabilities spline interpolated functions from data
+#'
+#' \code{pSfunCreate} takes a set of data and generates a distribution of probabilities function using
+#'    splines to interpolate between the resulting sample points. A distribution of probabilities is
+#'    a cumulative distribution function.
+#'
+#' @inheritParams ffunCreate
+#' @return returns a function performing spline interpolation on a set of points generated from a kernel
+#'    density of probabilities from the given \code{x.data}. In this case, the resulting kernel desity
+#'    points are accumulated prior to the interpolation.
+#'
+#' @export
+pSfunCreate <- function(x.data, ...) ffunCreate(x.data, dsplinefun, accumulate = T, ...)
 

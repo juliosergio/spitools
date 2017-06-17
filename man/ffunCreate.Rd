@@ -9,10 +9,11 @@ ffunCreate(x.data, aprxf = dapproxfun, accumulate = FALSE, ...)
 \arguments{
 \item{x.data}{A numeric vector containing the data.}
 
-\item{aprxf}{The creator of the interpolation function.}
+\item{aprxf}{A function used to create an interpolation function.}
 
 \item{accumulate}{If \code{TRUE}, it indicates that the resulting function is a distribution function, i.e.,
-an accumulated density function.}
+an accumulated density function; otherwise, the result will be a density of probabilities
+function.}
 
 \item{...}{All the other, optional, parameters required by \code{\link[stats]{density}} function to
 generate a kernel density estimation from the data.}
