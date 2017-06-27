@@ -23,7 +23,7 @@ dsplinefun <- function (...) {
     f0 <- stats::splinefun(...) # Computes splinefun from stats
     return (
         function (x, deriv=0L) {
-            dd <- data.table::data.table(x=x, y=f0(x, deriv))
+            dd <- data.table(x=x, y=f0(x, deriv))
             if (deriv==0L) {
                 dd[ y < 0 , y := 0][
                     y > 1 , y := 1]
@@ -101,7 +101,7 @@ papproxfun <- function (...) stats::approxfun(..., yleft = 0, yright = 1)
 #' @export
 ffunCreate <- function(x.data, aprxf=dapproxfun, accumulate = FALSE, ...) {
     p <- stats::density(x.data, bw = "SJ", ...)
-    p <- data.table::data.table(x=p$x, yy=p$y)
+    p <- data.table(x=p$x, yy=p$y)
     if (accumulate) {
         d <- base::mean(p$x-data.table::shift(p$x), na.rm = T)
         p$y <- cumsum(c(0, ((p$yy+data.table::shift(p$yy))/2)[-1]))*d
@@ -122,6 +122,13 @@ ffunCreate <- function(x.data, aprxf=dapproxfun, accumulate = FALSE, ...) {
 #' @inheritParams ffunCreate
 #' @return returns a function performing spline interpolation on a set of points generated from a kernel
 #'    density of probabilities from the given \code{x.data}.
+#'
+#' @examples
+#' X <- log(rgamma(150,5)) # Random data generation
+#' dfun <- dSfunCreate(X)   # To create a density function from X
+#' dfun(c(0.45, 1.84, 2.3))
+#' plot(dfun, xlim=c(-0.1, 3.0))
+#'
 #' @export
 dSfunCreate <- function(x.data, ...) ffunCreate(x.data, dsplinefun, ...)
 
@@ -136,6 +143,12 @@ dSfunCreate <- function(x.data, ...) ffunCreate(x.data, dsplinefun, ...)
 #' @return returns a function performing spline interpolation on a set of points generated from a kernel
 #'    density of probabilities from the given \code{x.data}. In this case, the resulting kernel desity
 #'    points are accumulated prior to the interpolation.
+#'
+#' @examples
+#' X <- log(rgamma(150,5)) # Random data generation
+#' pfun <- pSfunCreate(X) # To create a distribution spline interpolated function
+#' pfun(c(0.45, 1.84, 2.3))
+#' plot(pfun, xlim=c(-0.1, 3.0))
 #'
 #' @export
 pSfunCreate <- function(x.data, ...) ffunCreate(x.data, dsplinefun, accumulate = T, ...)

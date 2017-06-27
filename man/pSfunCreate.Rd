@@ -2,7 +2,7 @@
 % Please edit documentation in R/densities.R
 \name{pSfunCreate}
 \alias{pSfunCreate}
-\title{Create density of probabilities spline interpolated functions from data}
+\title{Create distribution of probabilities spline interpolated functions from data}
 \usage{
 pSfunCreate(x.data, ...)
 }
@@ -20,5 +20,12 @@ returns a function performing spline interpolation on a set of points generated 
 \description{
 \code{pSfunCreate} takes a set of data and generates a distribution of probabilities function using
    splines to interpolate between the resulting sample points. A distribution of probabilities is
-   cumulative distribution function.
+   a cumulative distribution function.
+}
+\examples{
+X <- log(rgamma(150,5)) # Random data generation
+pfun <- pSfunCreate(X) # To create a distribution spline interpolated function
+pfun(c(0.45, 1.84, 2.3))
+plot(pfun, xlim=c(-0.1, 3.0))
+
 }
