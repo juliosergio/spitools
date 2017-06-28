@@ -29,3 +29,6 @@ pfun(c(0.45, 1.84, 2.3))
 plot(pfun, xlim=c(-0.1, 3.0))
 
 }
+\seealso{
+\code{\link{ffunCreate}} for a more generic function.
+}

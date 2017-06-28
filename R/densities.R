@@ -105,7 +105,7 @@ ffunCreate <- function(x.data, aprxf=dapproxfun, accumulate = FALSE, ...) {
     if (accumulate) {
         d <- base::mean(p$x-data.table::shift(p$x), na.rm = T)
         p$y <- cumsum(c(0, ((p$yy+data.table::shift(p$yy))/2)[-1]))*d
-        p[y > 1, y := 1] # teoricamente la función no puede ser mayor que 1
+        p[y > 1, y := 1] # the value cannot be greater than 1
     } else
         names(p)[2] <- "y"
 
@@ -122,6 +122,8 @@ ffunCreate <- function(x.data, aprxf=dapproxfun, accumulate = FALSE, ...) {
 #' @inheritParams ffunCreate
 #' @return returns a function performing spline interpolation on a set of points generated from a kernel
 #'    density of probabilities from the given \code{x.data}.
+#'
+#' @seealso \code{\link{ffunCreate}} for a more generic function.
 #'
 #' @examples
 #' X <- log(rgamma(150,5)) # Random data generation
@@ -143,6 +145,8 @@ dSfunCreate <- function(x.data, ...) ffunCreate(x.data, dsplinefun, ...)
 #' @return returns a function performing spline interpolation on a set of points generated from a kernel
 #'    density of probabilities from the given \code{x.data}. In this case, the resulting kernel desity
 #'    points are accumulated prior to the interpolation.
+#'
+#' @seealso \code{\link{ffunCreate}} for a more generic function.
 #'
 #' @examples
 #' X <- log(rgamma(150,5)) # Random data generation
